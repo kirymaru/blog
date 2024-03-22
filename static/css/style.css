@@ -1,0 +1,23 @@
+/* Estilo para el fondo de la página */
+body {
+  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  color: white; /* Color del texto para contraste */
+  margin: 0; /* Elimina el margen predeterminado del body */
+  padding: 0; /* Elimina el padding predeterminado del body */
+  height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+  display: flex; /* Permite centrar el contenido verticalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  justify-content: center; /* Centra el contenido horizontalmente */
+}
+
+/* Estilo para las tarjetas */
+.card {
+  border-radius: 10px; /* Bordes redondeados */
+  max-width: 800px; /* Ancho máximo de las tarjetas */
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente para las tarjetas */
+  color: black; /* Color del texto para contraste */
+}
+
+.card-body {
+  padding: 20px; /* Espacio interno de las tarjetas */
+}

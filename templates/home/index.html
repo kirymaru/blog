@@ -1,0 +1,7 @@
+<h1>Administracion principal</h1>
+<h2>Bienvenido: {{user.nombres}} {{user.apellidos}}</h2>
+
+<a href="{% url 'users_app:registro' %}">Crear cuenta</a>
+<a href="{% url 'users_app:login' %}">Iniciar sesion</a>
+<a href="{% url 'users_app:logout' %}">Cerrar sesion</a>
+<a href="{% url 'users_app:update' %}">Actualizar info</a>

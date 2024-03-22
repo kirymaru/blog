@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %} Crear Nuevo Post {% endblock titulo %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+    body {
+      background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+      padding: 0; /* Elimina el padding predeterminado del body */
+      height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+    }
+    .card {
+        margin: 20px auto; /* Centra las tarjetas */
+        border-radius: 10px; /* Bordes redondeados */
+        max-width: 800px; /* Ancho máximo de las tarjetas */
+    }
+    .card-body {
+        padding: 20px; /* Espacio interno de las tarjetas */
+    }
+    .btn-primary {
+        background-color: #30cfd0; /* Color de fondo del botón */
+        border-color: #30cfd0; /* Color del borde del botón */
+    }
+    .btn-primary:hover {
+        background-color: #2ab7b7; /* Color de fondo del botón al pasar el mouse */
+        border-color: #2ab7b7; /* Color del borde del botón al pasar el mouse */
+    }
+</style>
+{% endblock extra_css %}
+
+{% block body %}
+<body class="bg-grey">
+    <div class="container" >
+        <div class="row justify-content-center">
+            <div class="col-md-6" >
+                <div class="card">
+                 <div class="card-header">
+                      Crear Nuevo Post
+                 </div>
+                 <div class="card-body">
+                      <form method="post">
+                          {% csrf_token %}
+                          {{ form.as_p }}
+                          <button type="submit" class="btn btn-primary">Crear</button>
+                          <a href="{% url 'corp:Post' %}" class="btn btn-primary" role="button">Cancelar</a>
+                      </form>
+                 </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+</body>
+{% endblock body %}

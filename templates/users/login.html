@@ -1,0 +1,73 @@
+{% load static %}
+<!Doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login Frank Post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+          background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+          padding: 0; /* Elimina el padding predeterminado del body */
+          height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+       
+      }
+          .card {
+            
+              margin: 20px auto; /* Centra las tarjetas */
+              border-radius: 10px; /* Bordes redondeados */
+              max-width: 800px; /* Ancho máximo de las tarjetas */
+          }
+          .card-body {
+              padding: 20px; /* Espacio interno de las tarjetas */
+          }
+          .btn-primary {
+            background-color: #30cfd0; /* Color de fondo del botón */
+            border-color: #30cfd0; /* Color del borde del botón */
+        }
+        .btn-primary:hover {
+            background-color: #2ab7b7; /* Color de fondo del botón al pasar el mouse */
+            border-color: #2ab7b7; /* Color del borde del botón al pasar el mouse */
+        }
+      </style>
+</head>
+<body >
+
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container prueba">
+            <div class="login-content">
+              
+                <div class="login-form">
+                    
+                    <form method="POST">
+                        <div class="form-group">
+                          
+                            {% csrf_token %}
+                            <label>Nombre de usuario</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            {{ form.password }}
+                        </div>
+                        <div class="btn-group d-flex justify-content-around">
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Iniciar Sesión</button>
+                            <a href="{% url 'users:registro' %}" class="btn btn-primary " role="button">Crear cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+ {{ post.titulo }}
+{% endblock titulo %}
+
+{% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<style>
+ body {
+    background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+    padding: 0; /* Elimina el padding predeterminado del body */
+    height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+ }
+    .card {
+        margin: 20px auto; /* Centra las tarjetas */
+        border-radius: 10px; /* Bordes redondeados */
+        max-width: 800px; /* Ancho máximo de las tarjetas */
+    }
+    .card-body {
+        padding: 20px; /* Espacio interno de las tarjetas */
+    }
+</style>
+{% endblock extra_css %}
+
+{% block body %}
+<div class="col-md-12 ">
+ <div class="card ">
+      <div class="card-body">
+          <div class="post">
+              <h2>{{ post.titulo }}</h2>
+              <p>{{ post.contenido }}</p>
+              
+          </div>
+      </div>
+ </div>
+</div>
+{% endblock body %}
