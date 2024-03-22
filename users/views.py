@@ -1,28 +1,25 @@
-from django.shortcuts import render, redirect
-from django.views.generic import View, TemplateView, ListView
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.core.serializers import serialize
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.contrib.auth import login, logout
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import UserRegisterForm, LoginForm
-from .models import User
+from django.urls import reverse
 
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'libreria/PostTemplate/listar_Post.html'
 
+
 class UserRegisterView(FormView):
     template_name = "users/register.html"
     form_class = UserRegisterForm
+    success_url = reverse_lazy('users:inicio_usuarios')
 
     def form_valid(self, form):
         form.save()
@@ -34,9 +31,10 @@ class UserRegisterView(FormView):
             settings.EMAIL_HOST_USER, 
             [user.email],
             fail_silently=False,
-             )
+        )
         login(self.request, user)
-        return redirect('users:inicio_usuarios')
+        return super().form_valid(form)
+
 
 class LoginUser(FormView):
     template_name = 'users/login.html'
@@ -53,14 +51,11 @@ class LoginUser(FormView):
         login(self.request, form.get_user())
         return super().form_valid(form)
 
+
 def logout_usuario(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
 
-
- 
-
-          
 
 class ErrorView(TemplateView):
     template_name = 'users/error_actualizar_clave.html'

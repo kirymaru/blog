@@ -1,9 +1,4 @@
-{% extends 'index.html' %}
-{% load static %}
-
-{% block titulo %} Post {% endblock titulo %}
-
-{% block extra_css %}
+{% extends 'index.html' %} {% load static %} {% block titulo %} Post {% endblock titulo %} {% block extra_css %}
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 <style>
@@ -11,101 +6,159 @@
     background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
     padding: 0; /* Elimina el padding predeterminado del body */
     height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
- 
-}
-    .card {
-        margin: 20px auto; /* Centra las tarjetas */
-        border-radius: 10px; /* Bordes redondeados */
-        max-width: 800px; /* Ancho máximo de las tarjetas */
-    }
-    .card-body {
-        padding: 20px; /* Espacio interno de las tarjetas */
-    }
- 
+  }
+  .card {
+    margin: 20px auto; /* Centra las tarjetas */
+    border-radius: 10px; /* Bordes redondeados */
+    max-width: 800px; /* Ancho máximo de las tarjetas */
+  }
+  .card-body {
+    padding: 20px; /* Espacio interno de las tarjetas */
+  }
 </style>
-{% endblock extra_css %}
+{% endblock extra_css %} {% block body %} {% for post in posts %}
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="post">
+        <h2>
+          <a class="focus" href="{% url 'corp:post_detail' post.id %}"
+            >{{ post.titulo }}</a
+          >
+        </h2>
+        <p>{{ post.contenido }}</p>
+        <p>Publicado por {{ post.author }}</p>
 
-{% block body %}
-{% for post in posts %}
-<div class="col-md-12 ">
- <div class="card ">
-      <div class="card-body">
-        
-          <div class="post">
-              <h2><a class='focus' href="{% url 'corp:post_detail' post.id %}">{{ post.titulo }}</a></h2>
-              <p>{{ post.contenido }}</p>
-              
-              <a type='button' class="fa fa-share" data-toggle="modal" data-target="#shareModal{{ post.id }}">
-              </a>
-              <!-- Botón de Eliminar -->
-              <a type="button" class="fa fa-trash" data-toggle="modal" data-target="#deleteModal{{ post.id }}">
-               
-              </a>
-              <!-- Modal de Eliminación -->
-              <div class="modal fade" id="deleteModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ post.id }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                 <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="deleteModalLabel{{ post.id }}">Eliminar Post</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    {%if messages %}
-                    {%for message in messages%}
-                        <div class="alert alert-success" role="alert">
-                          {{message}}
-                        </div>
-                    {%endfor%}
-                 {%endif%}
-                  
-                    <div class="modal-body">
-                      ¿Estás seguro de que quieres eliminar este post?
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <a href="{% url 'corp:post_delete' post.id %}" class="btn btn-danger">Eliminar</a>
-                    </div>
-                 </div>
-                </div>
+        <a
+          type="button"
+          class="fa fa-share"
+          data-toggle="modal"
+          data-target="#shareModal{{ post.id }}"
+          >Compartir
+        </a>
+
+        {% if user.is_authenticated and user == post.author %}
+        <!-- Botón de Eliminar -->
+        <a
+          type="button"
+          class="fa fa-trash"
+          data-toggle="modal"
+          data-target="#deleteModal{{ post.id }}"
+        >
+          Eliminar
+        </a>
+        {% endif %}
+        <!-- Modal de Eliminación -->
+        <div
+          class="modal fade"
+          id="deleteModal{{ post.id }}"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="deleteModalLabel{{ post.id }}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ post.id }}">
+                  Eliminar Post
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
-              <!-- Modal de Compartir -->
-              <div class="modal fade" id="shareModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel{{ post.id }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                 <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="shareModalLabel{{ post.id }}">Compartir Post</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    {%if messages %}
-                      {%for message in messages%}
-                           <div class="alert alert-success" role="alert">
-                             {{message}}
-                           </div>
-                      {%endfor%}
-                    {%endif%}
-                    <div class="modal-body">
-                      <form id="shareForm{{ post.id }}" method='post' action="{% url 'corp:post_share' post.id %}" >
-                        {% csrf_token %}
-                        <div class="form-group">
-                          <label for="email">Correo Electrónico</label>
-                          <input type="email" class="form-control" id="email{{ post.id }}" placeholder="Ingresa el correo electrónico" name='email'>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                          <button type="submit" class="btn btn-primary">Compartir</button>
-                        </div>
-                      </form>
-                    </div>
-                  
-                 </div>
-                </div>
+              {%if messages %} {%for message in messages%}
+              <div class="alert alert-success" role="alert">{{message}}</div>
+              {%endfor%} {%endif%}
+
+              <div class="modal-body">
+                ¿Estás seguro de que quieres eliminar este post?
               </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <a
+                  href="{% url 'corp:post_delete' post.id %}"
+                  class="btn btn-danger"
+                  >Eliminar</a
+                >
+              </div>
+            </div>
           </div>
+        </div>
+        <!-- Modal de Compartir -->
+        <div
+          class="modal fade"
+          id="shareModal{{ post.id }}"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="shareModalLabel{{ post.id }}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel{{ post.id }}">
+                  Compartir Post
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {%if messages %} {%for message in messages%}
+              <div class="alert alert-success" role="alert">{{message}}</div>
+              {%endfor%} {%endif%}
+              <div class="modal-body">
+                <form
+                  id="shareForm{{ post.id }}"
+                  method="post"
+                  action="{% url 'corp:post_share' post.id %}"
+                >
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email{{ post.id }}"
+                      placeholder="Ingresa el correo electrónico"
+                      name="email"
+                    />
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      Compartir
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
- </div>
+    </div>
+  </div>
 </div>
-{% endfor %}
-{% endblock body %}
+{% endfor %} {% endblock body %}

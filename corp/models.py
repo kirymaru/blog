@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -11,6 +12,7 @@ class Post(models.Model):
         "Contenido del Post", max_length=500, null=False, blank=True
     )
     pub_date = models.DateField(default=timezone.now)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Post"

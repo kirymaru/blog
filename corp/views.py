@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404,redirect
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from django.contrib import messages
-from django.views.generic.edit import CreateView,View
-from rest_framework import generics, authentication, permissions
+from django.views.generic.edit import FormView,View
 from django.conf import settings
-
+from .forms import PostForm
 from .models import *
 
 
@@ -20,25 +20,28 @@ def listarPost(request):
     
 
 
-class PostCreateView(CreateView):
-    model = Post
-    fields = ['titulo', 'contenido']
+class PostCreateView(FormView):
     template_name = 'libreria/PostTemplate/PostForm.html'
-    
+    form_class = PostForm
+    success_url = reverse_lazy('corp:Post') 
+
     def form_valid(self, form):
+        form.instance.author = self.request.user
         form.save()
-        return redirect('corp:Post')
+        return redirect(self.success_url)
 
 
 
 
 
 
+@login_required
 def post_delete(request, post_id):
-    post = Post.objects.get(id=post_id)
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user != post.author:
+        return redirect('corp:Post') # Redirige al usuario a la página principal si no es el autor
     post.delete()
-    messages.success(request, 'Post eliminado con éxito.')
-    return redirect('corp:Post') 
+    return redirect('index')
 
 
 class SharePostView(View):
