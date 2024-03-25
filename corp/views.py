@@ -41,7 +41,7 @@ def post_delete(request, post_id):
     if request.user != post.author:
         return redirect('corp:Post') # Redirige al usuario a la página principal si no es el autor
     post.delete()
-    return redirect('index')
+    return redirect('corp:Post')
 
 
 class SharePostView(View):
